@@ -1,6 +1,6 @@
-__author__ = "Fernando Cruz"
-__credits__ = ["Vítor Pereira, Fernando Cruz"]
+__author__ = "Mónica Leiras"
+__credits__ = ["Fernando Cruz, Mónica Leiras"]
 __license__ = "Apache License 2.0"
 __version__ = "0.0.1"
-__maintainer__ = "Fernando Cruz"
-__email__ = "fernando.cruz@ceb.uminho.pt"
+__maintainer__ = "Mónica Leiras"
+__email__ = "monicarafaelaleiras@gmail.com"
