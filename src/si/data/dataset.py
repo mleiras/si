@@ -50,10 +50,11 @@ class Dataset:
 
 if __name__ == '__main__':
     x = np.array([[1, 2, 3], [3, 1, 3]])
-    y = np.array([1, 2])
+    y = np.array([5, 5])
     features = ['A', 'B', 'C']
     dataset = Dataset(x, y, features, 'as')
     print(dataset.X)
+    print(dataset.y)
     print(dataset.shape())
     print(dataset.has_label())
     print(dataset.get_classes())
