@@ -10,11 +10,10 @@ import numpy as np
 from data.dataset import Dataset
 from statistics.f_classification import f_classification
 
-
-class SelectKBest:
-    def __init__(self, score_func, k: int):
+class SelectPercentile():
+    def __init__(self, score_func, percentile: int):
         self.score_func = score_func
-        self.k = k
+        self.percentile = percentile
         self.F = None
         self.p = None
 
@@ -23,7 +22,9 @@ class SelectKBest:
         return self
 
     def transform(self, dataset):
-        idx = np.argsort(self.F)[-self.k:]
+        num = len(dataset.features)
+        mask = num*self.percentile
+        idx = np.argsort(self.F)[-mask:]
         features= np.array(dataset.features)[idx] # selecionar as features com base nos idx 
         return Dataset(dataset.X[:,idx], y=dataset.y, features=list(features), label=dataset.label)
 
@@ -34,14 +35,3 @@ class SelectKBest:
 
 
 
-if __name__ == '__main__':
-    dataset = Dataset(X=np.array([[0, 2, 0, 3],
-                                    [0, 1, 4, 3],
-                                    [0, 1, 1, 3]]),
-                        y=np.array([0, 1, 0]),
-                        features=["f1", "f2", "f3", "f4"],
-                        label="y")
-
-    selector = SelectKBest(f_classification, 1)
-    dataset = selector.fit_transform(dataset)
-    print(dataset.features)
