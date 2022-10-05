@@ -1,4 +1,14 @@
+import os
+import sys
+import inspect
+
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir) 
+
 import numpy as np
+from data.dataset import Dataset
+
 
 class VarianceThreshold:
     def __init__(self, threshold):
@@ -26,10 +36,7 @@ class VarianceThreshold:
 
 
 if __name__ == '__main__':
-    from si.data.dataset import Dataset
-
-
-
+    pass
     # dataset = Dataset(
     #     X = np.array([[0,2,0,3],
     #     ])
