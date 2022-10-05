@@ -4,10 +4,22 @@ import pandas as pd
 
 class Dataset:
     def __init__(self, X, y=None, features=None, label=None) -> None:
-        self.X = X  # np array
         self.y = y  # np array de 1 dimensão
-        self.features = features  # pode ser uma lista - atributos em português
         self.label = label  # string
+
+        if X is None:
+            raise ValueError("X must not be None")
+        else:
+            self.X = X
+
+        if features is None:
+            self.features = [str(i) for i in range(X.shape[1])]
+        else:
+            self.features = list(features)
+
+        if y is not None and label is None:
+            self.label = 'y'
+
 
     def shape(self):
         return self.X.shape
@@ -21,9 +33,10 @@ class Dataset:
     def get_classes(self):  # valores unicos do vetor y (se existir)
         if self.has_label():
             return np.unique(self.y)
+        else:
+            raise ValueError("Dataset does not have y")
 
     def get_mean(self):
-        # se não colocar axis, vai fazer a média da matriz toda
         return np.mean(self.X, axis=0)
 
     def get_variance(self):
