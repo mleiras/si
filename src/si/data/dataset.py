@@ -60,20 +60,48 @@ class Dataset:
              'Máximo': self.get_max(), }
         )
 
+    def dropna(self):
+        '''
+        Remove todas as amostras que contêm pelo menos um valor nulo (NaN).
+        '''
+        self.X = self.X[~np.isnan(self.X).any(axis=1)]
+        return self.X
+
+
+    def fillna(self, num: int) -> None:
+        '''Substitui todas os valores nulos por outro valor (argumento da função/método).
+
+        Parameters
+        ----------
+        num : int
+            Valor de substituição
+        '''
+        self.X = np.nan_to_num(self.X, nan=num)
 
 if __name__ == '__main__':
     x = np.array([[1, 2, 3], [3, 1, 3]])
     y = np.array([5, 5])
     features = ['A', 'B', 'C']
     dataset = Dataset(x, y, features, 'as')
-    print(dataset.X)
-    print(dataset.y)
-    print(dataset.shape())
-    print(dataset.has_label())
-    print(dataset.get_classes())
-    print(dataset.get_mean())
-    print(dataset.get_variance())
-    print(dataset.get_median())
-    print(dataset.get_min())
-    print(dataset.get_max())
-    print(dataset.summary())
+    print('X:\n', dataset.X)
+    print('y:\n', dataset.y)
+    print('X shape:\n', dataset.shape())
+    print('Label:\n', dataset.has_label())
+    print('Classes:\n', dataset.get_classes())
+    print('Mean:\n', dataset.get_mean())
+    print('Variance:\n', dataset.get_variance())
+    print('Median:\n', dataset.get_median())
+    print('Min:\n', dataset.get_min())
+    print('Max:\n', dataset.get_max())
+    print('Summary:\n', dataset.summary())
+    print()
+    x2 = np.array([[1, 2, 3], [3, 1, np.nan]])
+    dataset2 = Dataset(x2, y, features, 'label')
+    print('Dataset 2:\n', dataset2.X)
+    dataset2.dropna()
+    print('Dataset 2 depois de dropna()):\n', dataset2.X)
+    dataset2 = Dataset(x2, y, features, 'label')
+    dataset2.fillna(100)
+    print('Dataset 2 depois de fillna(100):\n', dataset2.X)
+
+

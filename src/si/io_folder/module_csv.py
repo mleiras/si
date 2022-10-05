@@ -21,22 +21,20 @@ def read_csv(filename: str, sep: str, features: bool, label: bool):
         label = data.columns[-1]
         data = data.iloc[:, :-1]
         features = data.columns
-        dataset = Dataset(data, y=y, features=features, label=label)
 
     elif features and label is False:  # se tiver nomes nas colunas mas não tem y
         features = data.columns
-        dataset = Dataset(data, features=features)
+        y = None
 
     elif features is False and label:  # se tiver y mas não tem nomes nas colunas
         y = data.iloc[:, -1]
         label = data.columns[-1]
         data = data.iloc[:, :-1]
-        dataset = Dataset(data, y=y, label=label)
 
     else:  # quando não tem nem nomes nas colunas nem tem y nos dados
-        dataset = Dataset(data)
+        y = None
 
-    return dataset
+    return Dataset(data, y, features, label)
 
 
 def write_csv(filename, dataset, sep, features, label):
