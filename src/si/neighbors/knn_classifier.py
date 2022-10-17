@@ -7,10 +7,10 @@ parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir) 
 
 from data.dataset import Dataset
-import pandas as pd
 import numpy as np
 from statistics.euclidean_distance import euclidean_distance
 from metrics.accuracy import accuracy
+from typing import Union
 
 class KNNClassifier:
 
