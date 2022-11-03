@@ -22,7 +22,9 @@ class KMeans:
 
     def __centroids__(self, dataset):
         seeds = np.random.permutation(dataset.shape()[0])[:self.k]
-        self.centroids = dataset.X[seeds]
+        # self.centroids = dataset.X[seeds]
+        self.centroids = dataset.X.iloc[seeds] # funciona com iloc, porquê?
+        
 
 
     def __get_closest_centroid__(self, sample: np.ndarray) -> np.ndarray:
@@ -32,10 +34,10 @@ class KMeans:
 
 
     def fit(self, dataset):
-
+        self.__centroids__(dataset)
         convergence = False
         i = 0
-        labels = np.zeros() # corrigir aqui
+        labels = np.zeros(dataset.shape()[0])
         while not convergence and i< self.max_iter:
             centroids = []
             new_labels = np.apply_along_axis(self.__get_closest_centroid__, axis=1, arr=dataset.X)
@@ -55,21 +57,38 @@ class KMeans:
         return self
 
 
-    def __get_distances__(self, sample: np.ndarray) -> np.ndarray:
+    def __get_distances__(self, sample: np.ndarray) -> np.ndarray:      
         return self.distance(sample, self.centroids) # esta função adicional é util porque o np.apply só permite colocar um array enquanto aqui podemos colocar os 2
 
-    def trasnform(self, dataset: Dataset) -> np.ndarray:
+    def transform(self, dataset: Dataset) -> np.ndarray:
         centroids_distances = np.apply_along_axis(self.__get_distances__, axis=1, arr=dataset.X)
         return centroids_distances
+
+
+    def fit_transform(self, dataset: Dataset):
+        self.fit(dataset)
+        return self.transform(dataset)
 
 
     def predict(self, dataset: Dataset) -> np.ndarray:
         return np.apply_along_axis(self.__get_closest_centroid__, axis=1, arr=dataset.X)
 
+    
+    def fit_predict(self, dataset: Dataset):
+        self.fit(dataset)
+        return self.predict(dataset)
 
-
-
-
+    
+if __name__ == '__main__':
+    dataset_ = Dataset.from_random(100, 5)
+    k_ = 3
+    kmeans = KMeans(k_)
+    print('teste1')
+    res = kmeans.fit_transform(dataset_)
+    print('teste2')
+    predictions = kmeans.predict(dataset_)
+    print(res.shape)
+    print(predictions.shape)
 
 
 ## nota para SVD: X,S,Vt = np.linalg(X)

@@ -9,10 +9,13 @@ sys.path.insert(0, parentdir)
 from data.dataset import Dataset
 import numpy as np
 from statistics.euclidean_distance import euclidean_distance
-from metrics.accuracy import accuracy
+from metrics.rmse import rmse
 from typing import Union
 
-class KNNClassifier:
+
+class KNNRegressor:
+    pass
+
 
     def __init__(self, k: int, distance = euclidean_distance):
             self.k = k
@@ -33,9 +36,7 @@ class KNNClassifier:
 
         k_nearest_neighbors_labels = self.dataset.y[k_nearest_neighbors] # np.array com as varias classes
 
-        labels, counts = np.unique(k_nearest_neighbors, k_nearest_neighbors_labels, return_counts=True)
-    
-        return labels[np.argmax(counts)]
+        # return np.mean(k_nearest_neighbors, k_nearest_neighbors_labels)
 
 
     def predict(self, dataset: Dataset):
@@ -44,4 +45,5 @@ class KNNClassifier:
 
     def score(self, dataset: Dataset) -> float:
         predictions = self.predict(dataset)
-        return accuracy(dataset.y, predictions)
+        return rmse(dataset.y, predictions)
+

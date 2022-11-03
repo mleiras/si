@@ -1,4 +1,4 @@
-from scipy import stats
+from scipy.stats import stats
 
 def f_classification(dataset):
     classes = dataset.get_classes()

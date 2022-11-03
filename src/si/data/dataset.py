@@ -1,24 +1,26 @@
 import numpy as np
 import pandas as pd
+from typing import Tuple
 
 
 class Dataset:
-    def __init__(self, X, y=None, features=None, label=None) -> None:
-        self.y = y  # np array de 1 dimensão
-        self.label = label  # string
-
+    def __init__(self, X: np.ndarray, y: np.ndarray=None, features=None, label: str=None):
+        
         if X is None:
             raise ValueError("X must not be None")
+        
+        if features is None or features is False:
+            features = [str(i) for i in range(X.shape[1])]
         else:
-            self.X = X
-
-        if features is None:
-            self.features = [str(i) for i in range(X.shape[1])]
-        else:
-            self.features = list(features)
+            features = list(features)
 
         if y is not None and label is None:
-            self.label = 'y'
+            label = 'y'
+        
+        self.X = X
+        self.y = y  # np array de 1 dimensão
+        self.label = label  # string
+        self.features = features
 
 
     def shape(self):
@@ -77,6 +79,15 @@ class Dataset:
             Valor de substituição
         '''
         self.X = np.nan_to_num(self.X, nan=num)
+
+    def from_random(n_samples: int,
+                    n_features: int,
+                    n_classes: int = 2,
+                    features = None,
+                    label: str = None):
+        X = np.random.rand(n_samples, n_features)
+        y = np.random.randint(0, n_classes, n_samples)
+        return Dataset(X, y, features=features, label=label)
 
 if __name__ == '__main__':
     x = np.array([[1, 2, 3], [3, 1, 3]])
