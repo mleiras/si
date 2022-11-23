@@ -24,7 +24,7 @@ class SelectPercentile():
         num = len(dataset.features)
         mask = int(num*self.percentile/100)
         idx = np.argsort(self.F)[-mask:]
-        best_features = dataset.X.iloc[:, idx] #tenho de usar iloc aqui
+        best_features = dataset.X[:, idx]
         best_features_names = [dataset.features[i] for i in idx]
         return Dataset(best_features, dataset.y, best_features_names, dataset.label)
 

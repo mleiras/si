@@ -22,9 +22,7 @@ class KMeans:
 
     def __centroids__(self, dataset):
         seeds = np.random.permutation(dataset.shape()[0])[:self.k]
-        # self.centroids = dataset.X[seeds]
-        self.centroids = dataset.X.iloc[seeds] # funciona com iloc, porquê?
-        
+        self.centroids = dataset.X[seeds]
 
 
     def __get_closest_centroid__(self, sample: np.ndarray) -> np.ndarray:
@@ -35,16 +33,18 @@ class KMeans:
 
     def fit(self, dataset):
         self.__centroids__(dataset)
+
         convergence = False
         i = 0
         labels = np.zeros(dataset.shape()[0])
-        while not convergence and i< self.max_iter:
+
+        while not convergence and i < self.max_iter:
             centroids = []
             new_labels = np.apply_along_axis(self.__get_closest_centroid__, axis=1, arr=dataset.X)
-            for i in range(self.k):
-                centroid = dataset.X[labels == i]
-                centroid_mean = np.mean(centroid)
-                centroids.append(centroid_mean)
+            for k in range(self.k):
+                centroid = np.mean(dataset.X[new_labels == k], axis=0)
+                centroids.append(centroid)
+
             self.centroids = np.array(centroids)
 
             convergence = np.any(new_labels != labels)
@@ -83,12 +83,12 @@ if __name__ == '__main__':
     dataset_ = Dataset.from_random(100, 5)
     k_ = 3
     kmeans = KMeans(k_)
-    print('teste1')
+    res = kmeans.fit(dataset_)
     res = kmeans.fit_transform(dataset_)
-    print('teste2')
     predictions = kmeans.predict(dataset_)
     print(res.shape)
     print(predictions.shape)
+    print('--------')
 
 
 ## nota para SVD: X,S,Vt = np.linalg(X)
