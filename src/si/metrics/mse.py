@@ -1,6 +1,5 @@
 import numpy as np
 
-
 def mse(y_true: np.ndarray, y_pred: np.ndarray) -> float:
     """
     It returns the mean squared error of the model on the given dataset
