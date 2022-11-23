@@ -11,7 +11,6 @@ from metrics.accuracy import accuracy
 from statistics.sigmoid_function import sigmoid_function
 
 
-
 class LogisticRegression:
     def __init__(self, l2_penalty: float = 1, alpha: float = 0.001, max_iter: int = 2000):
         """
@@ -33,6 +32,7 @@ class LogisticRegression:
         # attributes
         self.theta = None
         self.theta_zero = None
+        self.cost_history = {}
 
     def fit(self, dataset: Dataset) -> 'LogisticRegression':
         """
@@ -68,6 +68,8 @@ class LogisticRegression:
             # updating the model parameters
             self.theta = self.theta - gradient - penalization_term
             self.theta_zero = self.theta_zero - (self.alpha * (1 / m)) * np.sum(y_pred - dataset.y)
+
+            self.cost_history[i] = round(self.cost(dataset),2)
 
         return self
 
@@ -125,8 +127,72 @@ class LogisticRegression:
             The cost function of the model
         """
         y_pred = sigmoid_function(np.dot(dataset.X, self.theta) + self.theta_zero)
-        cost = (~dataset.y*np.log(y_pred)) - ((1-dataset.y)*np.log(1-y_pred)) # erro aqui?
+        cost = (-dataset.y*np.log(y_pred)) - ((1-dataset.y)*np.log(1-y_pred))
         cost = np.sum(cost) / dataset.shape()[0]
-        cost = cost + (self.l2_penalty*np.sum(self.theta_zero**2) / (2*dataset.shape()[0]))
+        cost = cost + (self.l2_penalty*np.sum(self.theta**2) / (2*dataset.shape()[0]))
         return cost
 
+
+if __name__ == '__main__':
+    import matplotlib.pyplot as plt
+    
+    # import dataset
+    from data.dataset import Dataset
+    from model_selection.split import train_test_split
+
+    # load and split the dataset
+    dataset_ = Dataset.from_random(600, 100, 2)
+    dataset_train, dataset_test = train_test_split(dataset_, test_size=0.2)
+
+    # fit the model
+    model = LogisticRegression(l2_penalty=1, alpha=0.001, max_iter=1000)
+    model.fit(dataset_train)
+
+    # compute the score
+    score = model.score(dataset_test)
+    print(f"Score: {score}")
+
+    plt.plot(model.cost_history.values())
+
+    plt.title("Cost History")
+    plt.ylabel("Cost")
+    plt.xlabel("Iterations")
+    plt.show()
+
+
+    print('----------------------------------')
+
+
+    from io_folder.module_csv import read_csv 
+    breast_bin = read_csv('/home/monica/Documents/2_ano/sistemas/si/datasets/breast-bin.csv', sep=',',features=True, label=True)
+
+    # fit the model    
+    model = LogisticRegression()
+    model.fit(breast_bin)
+
+    # get coefs
+    print(f"Parameters: {model.theta}")
+
+    # compute the score
+    score = model.score(breast_bin)
+    print(f"Score: {score}")
+
+    # compute the cost
+    cost = model.cost(breast_bin)
+    print(f"Cost: {cost}")
+
+    # predict
+    y_pred_ = model.predict(breast_bin)
+    print(f"Predictions: {y_pred_}")
+
+    # print(model.cost_history)
+
+    plt.plot(model.cost_history.values())
+
+    plt.title("Cost History")
+    plt.ylabel("Cost")
+    plt.xlabel("Iterations")
+    plt.show()
+
+
+    

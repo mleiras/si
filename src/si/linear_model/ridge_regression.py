@@ -90,6 +90,8 @@ class RidgeRegression:
             self.theta = self.theta - gradient - penalization_term
             self.theta_zero = self.theta_zero - (self.alpha * (1 / m)) * np.sum(y_pred - dataset.y)
 
+            self.cost_history[i] = round(self.cost(dataset),2)
+
         return self
 
     def predict(self, dataset: Dataset) -> np.array:
@@ -143,12 +145,9 @@ class RidgeRegression:
         return (np.sum((y_pred - dataset.y) ** 2) + (self.l2_penalty * np.sum(self.theta ** 2))) / (2 * len(dataset.y))
 
 
-
-
-
 if __name__ == '__main__':
-    # import dataset
-    from data.dataset import Dataset
+
+    import matplotlib.pyplot as plt
 
     # make a linear dataset
     X = np.array([[1, 1], [1, 2], [2, 2], [2, 3]])
@@ -173,3 +172,50 @@ if __name__ == '__main__':
     # predict
     y_pred_ = model.predict(Dataset(X=np.array([[3, 5]])))
     print(f"Predictions: {y_pred_}")
+
+    # print(model.cost_history)
+
+
+    plt.plot(model.cost_history.values())
+
+    plt.title("Cost History")
+    plt.ylabel("Cost")
+    plt.xlabel("Iterations")
+    plt.show()
+
+    print('----------------------------------')
+
+
+    from io_folder.module_csv import read_csv 
+    cpu = read_csv('/home/monica/Documents/2_ano/sistemas/si/datasets/cpu.csv', sep=',',features=True, label=True)
+
+    # fit the model    
+    model = RidgeRegression(max_iter=50) # mais de 55 dá erro??
+    model.fit(cpu)
+
+    # get coefs
+    print(f"Parameters: {model.theta}")
+
+    # compute the score
+    score = model.score(cpu)
+    print(f"Score: {score}")
+
+    # compute the cost
+    cost = model.cost(cpu)
+    print(f"Cost: {cost}")
+
+    # predict
+    y_pred_ = model.predict(cpu)
+    print(f"Predictions: {y_pred_}")
+
+    # print(model.cost_history)
+
+    plt.plot(model.cost_history.values())
+
+    plt.title("Cost History")
+    plt.ylabel("Cost")
+    plt.xlabel("Iterations")
+    plt.show()
+
+
+    
