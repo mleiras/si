@@ -7,7 +7,6 @@ parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir) 
 
 from data.dataset import Dataset
-import pandas as pd
 import numpy as np
 
 def train_test_split(dataset: Dataset, test_size: float = 0.2, random_state: int = 42) -> tuple:

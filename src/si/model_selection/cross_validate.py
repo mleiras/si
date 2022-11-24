@@ -6,10 +6,8 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir) 
 
-from io_folder.module_csv import read_csv
-
 import numpy as np
-from split import train_test_split
+from model_selection.split import train_test_split
 from data.dataset import Dataset
 
 
@@ -21,7 +19,7 @@ def cross_validate(model, dataset: Dataset, scoring= None, cv: int = 3, test_siz
         'test': []
     }
 
-    for i in cv:
+    for i in range(cv):
         seed = np.random.randint(0, 1000)
         scores['seeds'].append(seed)
         data_train, data_test = train_test_split(dataset, test_size, random_state=seed)
@@ -47,7 +45,12 @@ def cross_validate(model, dataset: Dataset, scoring= None, cv: int = 3, test_siz
 
 
 if __name__ == '__main__':
+    from io_folder.module_csv import read_csv
+    from sklearn.preprocessing import StandardScaler
+    from linear_model.logistic_regression import LogisticRegression
 
-    breast_bin = read_csv('/home/monica/Documents/2_ano/sistemas/si/datasets/breast_bin.csv')
-
-
+    breast_bin = read_csv('/home/monica/Documents/2_ano/sistemas/si/datasets/breast-bin.csv', sep=',', features = False, label=True)
+    breast_bin.X = StandardScaler().fit_transform(breast_bin.X)
+    modelo_lg = LogisticRegression()
+    scores = cross_validate(modelo_lg, breast_bin, cv=5)
+    print(scores)
