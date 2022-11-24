@@ -63,8 +63,8 @@ class LogisticRegression:
 
             self.cost_history[i] = round(self.cost(dataset),2)
 
-            if i > 1 and self.cost_history[i-1] - self.cost_history[i] < 1:
-                break
+            # if i > 1 and self.cost_history[i-1] - self.cost_history[i] < 1:
+            #     break
 
 
     def _adaptive_fit(self, dataset: Dataset):

@@ -22,9 +22,6 @@ class VotingClassifier:
 
 
     def predict(self, dataset):
-        # lista = []
-        # for model in self.models:
-        #     lista.append(model.predict(dataset))
         
         def _get_majority_vote(pred):
 
@@ -40,7 +37,16 @@ class VotingClassifier:
 
     
 if __name__ == '__main__':
+    from sklearn import preprocessing
+    from model_selection.split import train_test_split
+    from neighbors.knn_classifier import KNNClassifier
+    from linear_model.logistic_regression import LogisticRegression
+
     breast_bin = read_csv('/home/monica/Documents/2_ano/sistemas/si/datasets/breast-bin.csv', sep=',', features = False, label=True)
-    
-
-
+    breast_bin.X = preprocessing.StandardScaler().fit_transform(breast_bin.X)
+    breast_bin_train, breast_bin_test = train_test_split(breast_bin)
+    modelo_knn = KNNClassifier()
+    modelo_lg = LogisticRegression()
+    voting_model = VotingClassifier([modelo_knn, modelo_lg])
+    voting_model.fit(breast_bin_train)
+    print(voting_model.score(breast_bin_test))
