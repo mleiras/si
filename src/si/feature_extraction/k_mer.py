@@ -11,14 +11,23 @@ from data.dataset import Dataset
 import itertools
 
 class KMer:
-    def __init__(self, k: int = 3):
+    def __init__(self, k: int = 3, alphabet: str = 'DNA'):
         self.k = k
-        self.k_mers = []
+        self.alphabet = alphabet.upper()
+
+        if self.alphabet == 'DNA':
+            self.alphabet = 'ACTG'
+        elif self.alphabet == 'PROTEIN':
+            self.alphabet = 'FLIMVSPTAY_HQNKDECWRG'
+        else:
+            self.alphabet = self.alphabet
+        
+        self.k_mers = None
 
     
     def fit(self, dataset):
-        for combination in itertools.product('ACTG', repeat=self.k):
-            self.k_mers.append(''.join(combination))
+        self.k_mers = [''.join(k_mer) for k_mer in itertools.product(self.alphabet, repeat=self.k)]
+
         return self
 
     def _get_kmer(self, seq):
@@ -31,10 +40,10 @@ class KMer:
 
 
     def transform(self, dataset):
-        sequences_kmer = [self._get_kmer(seq) for seq in dataset.X.iloc[:,0]]
+        sequences_kmer = [self._get_kmer(seq) for seq in dataset.X[:,0]]
         sequences_kmer = np.array(sequences_kmer)
 
-        return Dataset(X=sequences_kmer, y=dataset.y, features=list(self.k_mers), label=dataset.label)
+        return Dataset(X=sequences_kmer, y=dataset.y, features=self.k_mers, label=dataset.label)
         
 
     def fit_transform(self, dataset):
@@ -44,8 +53,34 @@ class KMer:
 
 
 if __name__ == '__main__':
+    dataset_ = Dataset(X=np.array([['ACTGTTTAGCGGA', 'ACTGTTTAGCGGA']]),
+                       y=np.array([1, 0]),
+                       features=['sequence'],
+                       label='label')
+
+    k_mer_ = KMer(k=2)
+    dataset_ = k_mer_.fit_transform(dataset_)
+    print(dataset_.X)
+    print(dataset_.features)
+
+    print('---------------------------------------------------------')
+    
     from io_folder.module_csv import read_csv
+    from sklearn.preprocessing import StandardScaler
+    from linear_model.logistic_regression import LogisticRegression
+    from model_selection.split import train_test_split
+
+
     tfbs_dataset = read_csv('/home/monica/Documents/2_ano/sistemas/si/datasets/tfbs.csv', sep=',',features=True, label=True)
     kmer = KMer(3)
     kmer_dataset = kmer.fit_transform(tfbs_dataset)
     print(kmer_dataset.features)
+
+    kmer_dataset.X = StandardScaler().fit_transform(kmer_dataset.X)
+    kmer_dataset_train, kmer_dataset_test = train_test_split(kmer_dataset, test_size=0.2)
+    model = LogisticRegression()
+    model.fit(kmer_dataset_train)
+    score = model.score(kmer_dataset_test)
+    print(f"Score: {score}")
+
+    # model.cost_plot()
