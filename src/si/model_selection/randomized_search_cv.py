@@ -72,5 +72,6 @@ if __name__ == '__main__':
                              parameter_grid=parameter_grid_,
                              cv=3, n_iter=10)
     
-    print(scores)
+    print('Scores: \n', scores)
+    
 

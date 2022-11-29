@@ -61,10 +61,10 @@ class LogisticRegression:
             self.theta = self.theta - gradient - penalization_term
             self.theta_zero = self.theta_zero - (self.alpha * (1 / m)) * np.sum(y_pred - dataset.y)
 
-            self.cost_history[i] = round(self.cost(dataset),2)
+            self.cost_history[i] = self.cost(dataset)
 
-            # if i > 1 and self.cost_history[i-1] - self.cost_history[i] < 1:
-            #     break
+            if i > 1 and self.cost_history[i-1] - self.cost_history[i] < 0.0001:
+                break
 
 
     def _adaptive_fit(self, dataset: Dataset):
@@ -91,14 +91,11 @@ class LogisticRegression:
             self.theta = self.theta - gradient - penalization_term
             self.theta_zero = self.theta_zero - (self.alpha * (1 / m)) * np.sum(y_pred - dataset.y)
 
-            self.cost_history[i] = round(self.cost(dataset),2)
+            self.cost_history[i] = self.cost(dataset)
 
-            if i > 1 and self.cost_history[i-1] - self.cost_history[i] < 1:
+            if i > 1 and self.cost_history[i-1] - self.cost_history[i] < 0.0001:
                 self.alpha = self.alpha/2
             
-            if i > 1 and self.cost_history[i-1] == self.cost_history[i]:
-                break
-
 
     def fit(self, dataset: Dataset) -> 'LogisticRegression':
         """
@@ -214,31 +211,31 @@ if __name__ == '__main__':
     print('----------------------------------')
 
 
-    from io_folder.module_csv import read_csv 
-    breast_bin = read_csv('/home/monica/Documents/2_ano/sistemas/si/datasets/breast-bin.csv', sep=',',features=True, label=True)
+    # from io_folder.module_csv import read_csv 
+    # breast_bin = read_csv('/home/monica/Documents/2_ano/sistemas/si/datasets/breast-bin.csv', sep=',',features=True, label=True)
 
-    # fit the model    
-    model = LogisticRegression()
-    model.fit(breast_bin)
+    # # fit the model    
+    # model = LogisticRegression()
+    # model.fit(breast_bin)
 
-    # get coefs
-    print(f"Parameters: {model.theta}")
+    # # get coefs
+    # print(f"Parameters: {model.theta}")
 
-    # compute the score
-    score = model.score(breast_bin)
-    print(f"Score: {score}")
+    # # compute the score
+    # score = model.score(breast_bin)
+    # print(f"Score: {score}")
 
-    # compute the cost
-    cost = model.cost(breast_bin)
-    print(f"Cost: {cost}")
+    # # compute the cost
+    # cost = model.cost(breast_bin)
+    # print(f"Cost: {cost}")
 
-    # predict
-    y_pred_ = model.predict(breast_bin)
-    print(f"Predictions: {y_pred_}")
+    # # predict
+    # y_pred_ = model.predict(breast_bin)
+    # print(f"Predictions: {y_pred_}")
 
-    # print(model.cost_history)
+    # # print(model.cost_history)
 
-    model.cost_plot()
+    # model.cost_plot()
 
 
     

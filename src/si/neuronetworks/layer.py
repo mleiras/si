@@ -19,3 +19,10 @@ class Dense:
 
     def forward(self, input_data: np.ndarray) -> np.ndarray:
         return np.dot(input_data, self.weights) + self.bias #input_data é uma matriz com colunas==features, as linhas são os exemplos // Para multiplicar matrizes, ao nº de colunas da primeira matriz tem de ser igual ao nº de linhas da segunda matriz (neste caso matriz de pesos)
+
+
+    def backward(self, error: np.ndarray, learning_rate: float) -> np.ndarray:
+        ...
+        #proxima aula
+        
+        return error 

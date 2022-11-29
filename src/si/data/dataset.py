@@ -89,6 +89,15 @@ class Dataset:
         y = np.random.randint(0, n_classes, n_samples)
         return Dataset(X, y, features=features, label=label)
 
+    def to_dataframe(self) -> pd.DataFrame:
+        if self.y is None:
+            return pd.DataFrame(self.X, columns=self.features)
+        else:
+            df = pd.DataFrame(self.X, columns=self.features)
+            df[self.label] = self.y
+            return df
+            
+
 if __name__ == '__main__':
     x = np.array([[1, 2, 3], [3, 1, 3]])
     y = np.array([5, 5])

@@ -81,10 +81,10 @@ class RidgeRegression:
             self.theta = self.theta - gradient - penalization_term
             self.theta_zero = self.theta_zero - (self.alpha * (1 / m)) * np.sum(y_pred - dataset.y)
 
-            self.cost_history[i] = round(self.cost(dataset),2)
+            self.cost_history[i] = self.cost(dataset)
 
-            # if i > 1 and self.cost_history[i-1] - self.cost_history[i] < 1:
-            #     break
+            if i > 1 and self.cost_history[i-1] - self.cost_history[i] < 1:
+                break
 
 
     def _adaptive_fit(self, dataset: Dataset):
@@ -111,13 +111,11 @@ class RidgeRegression:
             self.theta = self.theta - gradient - penalization_term
             self.theta_zero = self.theta_zero - (self.alpha * (1 / m)) * np.sum(y_pred - dataset.y)
 
-            self.cost_history[i] = round(self.cost(dataset),2)
+            self.cost_history[i] = self.cost(dataset)
 
             if i > 1 and self.cost_history[i-1] - self.cost_history[i] < 1:
                 self.alpha = self.alpha/2
             
-            if i > 1 and self.cost_history[i-1] == self.cost_history[i]:
-                break
 
 
     def fit(self, dataset: Dataset) -> 'RidgeRegression':
@@ -135,8 +133,8 @@ class RidgeRegression:
             The fitted model
         """
         if self.use_adaptive_alpha:
+            print('Adaptive')
             self._adaptive_fit(dataset)
-
         else:
             self._regular_fit(dataset)
 
