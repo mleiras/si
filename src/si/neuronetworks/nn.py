@@ -10,6 +10,7 @@ import numpy as np
 from data.dataset import Dataset
 from metrics.mse import mse
 from metrics.mse_derivative import mse_derivative
+from metrics.accuracy import accuracy
 
 from typing import Callable
 
@@ -27,20 +28,22 @@ class NN:
 
     
     def fit(self, dataset = Dataset) -> 'NN':
-        x = dataset.X
-        y = dataset.y
+        
 
         for epoch in range(self.epochs):
+            y_pred = np.array(dataset.X)
+            y_true = np.reshape(dataset.y, (-1,1))
+
             for layer in self.layers:
-                x = layer.forward(x)
+                y_pred = layer.forward(y_pred)
             
-            error = self.loss_derivative(y, x)
+            error = self.loss_derivative(y_true, y_pred)
 
             for layer in self.layers[::-1]: # começamos pela ultima layer
                 error = layer.backward(error, self.learning_rate)
             
             # para saber se estamos a chegar ao minimo global ao longo das epochs
-            cost = self.loss_function(y, x)
+            cost = self.loss_function(y_true, y_pred)
             self.history[epoch] = cost
 
             if self.verbose:
@@ -49,13 +52,24 @@ class NN:
 
             return self
 
-    
+
     def predict(self, dataset: Dataset):
         x = dataset.X 
         for layer in self.layers:
             x = layer.forward(x)
         
         return x
+
+
+    def cost(self, dataset: Dataset) -> float:
+        y_pred = self.predict(dataset)
+        return self.loss(dataset.y, y_pred)
+
+    def score(self, dataset: Dataset, scoring_func: Callable = accuracy) -> float:
+        y_pred = self.predict(dataset)
+        return scoring_func(dataset.y, y_pred)
+    
+    
 
 
 

@@ -16,13 +16,17 @@ class Dense:
 
         self.weights = np.random.randn(self.input_size, self.output_size) * 0.01
         self.bias = np.zeros((1,self.output_size))
+        self.X = None
 
     def forward(self, input_data: np.ndarray) -> np.ndarray:
+        self.X = input_data
         return np.dot(input_data, self.weights) + self.bias #input_data é uma matriz com colunas==features, as linhas são os exemplos // Para multiplicar matrizes, ao nº de colunas da primeira matriz tem de ser igual ao nº de linhas da segunda matriz (neste caso matriz de pesos)
 
 
     def backward(self, error: np.ndarray, learning_rate: float) -> np.ndarray:
-        ...
-        #proxima aula
-        
-        return error 
+        error_to_propagate = np.dot(error, self.weights.T)
+
+        self.weights -= learning_rate * np.dot(self.input_data.T, error)
+        self.bias -= learning_rate * np.sum(error, axis=0)
+
+        return error_to_propagate
