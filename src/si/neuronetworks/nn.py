@@ -26,7 +26,7 @@ class NN:
 
         self.history = {}
 
-    
+    error
     def fit(self, dataset = Dataset) -> 'NN':
         
 

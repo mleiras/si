@@ -26,7 +26,7 @@ class Dense:
     def backward(self, error: np.ndarray, learning_rate: float) -> np.ndarray:
         error_to_propagate = np.dot(error, self.weights.T)
 
-        self.weights -= learning_rate * np.dot(self.input_data.T, error)
+        self.weights -= learning_rate * np.dot(self.X.T, error)
         self.bias -= learning_rate * np.sum(error, axis=0)
 
         return error_to_propagate

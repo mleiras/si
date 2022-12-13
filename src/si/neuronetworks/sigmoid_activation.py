@@ -18,7 +18,7 @@ class SigmoidActivation:
         return sigmoid_function(input_data)
 
 
-    def backward(self, error: np.ndarray) -> np.ndarray:
+    def backward(self, error: np.ndarray, learning_rate: float) -> np.ndarray:
         deriv_sig = sigmoid_function(self.input_data) * (1-sigmoid_function(self.input_data))
 
         error_to_propagate = error * deriv_sig

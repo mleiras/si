@@ -16,7 +16,15 @@ class ReLUActivation:
         self.input_data = input_data
         return np.maximum(0, input_data)
 
-    def backward(self, error: np.ndarray) -> np.ndarray:
+    def __sub_val__(self, sample: np.ndarray) -> np.ndarray:
+        if sample < 0:
+            sample = 0
+        else:
+            sample = 1
+        return sample
+
+    def backward(self, error: np.ndarray, learning_rate: float) -> np.ndarray:
+        self.input_data.X = np.apply_along_axis(lambda s: 0 if (s <=0 ) else 1 , axis=1, arr=self.input_data.X)
         # substituir valores de self.input_data (inferiores a 0 por 0 e superiores a 0 por 1)
         # utilizar função where
 
