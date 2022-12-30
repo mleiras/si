@@ -29,10 +29,13 @@ class NN:
     
     def fit(self, dataset = Dataset) -> 'NN':
         
-
+    
         for epoch in range(self.epochs):
-            y_pred = np.array(dataset.X)
-            y_true = np.reshape(dataset.y, (-1,1))
+            X = dataset.X.copy()
+            y = dataset.y.copy()
+
+            y_pred = np.array(X)
+            y_true = np.reshape(y, (-1,1))
 
             for layer in self.layers:
                 y_pred = layer.forward(y_pred)
@@ -47,30 +50,24 @@ class NN:
             self.history[epoch] = cost
 
             if self.verbose:
-                print(f' Epoch {epoch}') # acabar aqui
-
-
-            return self
+                print(f' Epoch {epoch}/{self.epochs} with cost: {round(cost, 3)}')
+            
+        return self
 
 
     def predict(self, dataset: Dataset):
-        x = dataset.X 
+        x = dataset.X.copy()
         for layer in self.layers:
             x = layer.forward(x)
         
         return x
 
 
-    def cost(self, dataset: Dataset) -> float:
-        y_pred = self.predict(dataset)
-        return self.loss(dataset.y, y_pred)
-
     def score(self, dataset: Dataset, scoring_func: Callable = accuracy) -> float:
         y_pred = self.predict(dataset)
         return scoring_func(dataset.y, y_pred)
     
     
-
 
 
 if __name__ == '__main__':
