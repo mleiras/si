@@ -24,12 +24,9 @@ class ReLUActivation:
         return sample
 
     def backward(self, error: np.ndarray, learning_rate: float) -> np.ndarray:
+        # substituir valores de self.input_data (inferiores a 0 por 0 e superiores a 0 por 1) # pode-se utilizar função where também
         self.input_data.X = np.apply_along_axis(lambda s: 0 if (s <=0 ) else 1 , axis=1, arr=self.input_data.X)
-        # substituir valores de self.input_data (inferiores a 0 por 0 e superiores a 0 por 1)
-        # utilizar função where
-
-        # where self.input_data >0: self.input_data = 1 (where not: 0)
-
+    
         error_to_propagate = error * self.input_data
 
         return error_to_propagate
