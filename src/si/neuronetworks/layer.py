@@ -14,7 +14,7 @@ class Dense:
         self.input_size = input_size
         self.output_size = output_size
 
-        self.weights = np.random.randn(self.input_size, self.output_size) # * 0.01
+        self.weights = np.random.randn(self.input_size, self.output_size) * 0.01
         self.bias = np.zeros((1,self.output_size))
         self.X = None
 

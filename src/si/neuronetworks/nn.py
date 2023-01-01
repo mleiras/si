@@ -40,6 +40,8 @@ class NN:
             for layer in self.layers:
                 y_pred = layer.forward(y_pred)
             
+            #backward propagation
+            
             error = self.loss_derivative(y_true, y_pred)
 
             for layer in self.layers[::-1]: # começamos pela ultima layer
