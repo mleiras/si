@@ -27,8 +27,8 @@ class KMer:
     
     def fit(self, dataset):
         self.k_mers = [''.join(k_mer) for k_mer in itertools.product(self.alphabet, repeat=self.k)]
-
         return self
+
 
     def _get_kmer(self, seq):
         dicio = {k_mer: 0 for k_mer in self.k_mers}

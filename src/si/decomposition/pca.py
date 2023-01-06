@@ -48,11 +48,11 @@ class PCA:
 
     def transform(self, dataset: Dataset):
         # center the data
-        centered_data = self.__get_centered_data(dataset)
+        centered_data = self.__get_centered_data(dataset) # devia subtrair a media calculada anteriormente
 
         # X reduced
         *rest, Vt = self.__get_svd(centered_data)
-        V = Vt.T
+        V = Vt.T # usar o V calculado anteriormente também
         X_red = np.dot(centered_data, V)
 
         return X_red

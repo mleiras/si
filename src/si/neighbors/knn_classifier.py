@@ -15,9 +15,9 @@ from typing import Union
 class KNNClassifier:
 
     def __init__(self, k: int = 1, distance = euclidean_distance):
-            self.k = k
-            self.distance = distance
-            self.dataset = None
+        self.k = k
+        self.distance = distance
+        self.dataset = None
     
 
     def fit(self, dataset: Dataset):

@@ -24,7 +24,7 @@ class StackingClassifier:
         # guardar as previsões de cada modelo
         predictions = np.array([model.predict(dataset) for model in self.models]) # é preciso fazer transposta aqui? ver depois nos testes
         # fit do modelo final com as previsões calculadas anteriormente
-        model_pred = Dataset(dataset.X, predictions.T)
+        model_pred = Dataset(predictions.T, dataset.y)
         self.final_model.fit(model_pred)
         return self
 

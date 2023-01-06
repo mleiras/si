@@ -20,7 +20,7 @@ class ReLUActivation:
     def backward(self, error: np.ndarray, learning_rate: float) -> np.ndarray:
         # substituir valores de self.input_data (inferiores a 0 por 0 e superiores a 0 por 1) # pode-se utilizar função where
         # self.input_data = np.where(self.input_data <0, 0,1)
-        self.input_data = np.where(self.input_data >1, 1, 0)
+        self.input_data = np.where(self.input_data >0, 1, 0) # corrigir para 0 como acima, mas loss function tem erro
 
         error_to_propagate = error * (self.input_data)
 
